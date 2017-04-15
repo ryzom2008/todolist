@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, DoCheck} from '@angular/core';
 import {GetEventsService} from './get-events.service';
 import {AuthorizeService} from './authorize.service';
 import {Response} from '@angular/http';
@@ -11,15 +11,19 @@ import {Response} from '@angular/http';
 })
 
 export class AppComponent implements OnInit {
-  newItem: string;
+  newItem: any;
   todoList: any;
   inputItem: string;
+  signIn: boolean;
+  signOut: boolean;
 
   constructor(private getEventsService: GetEventsService,
               private authorizeService: AuthorizeService) {
     this.newItem = '';
     this.todoList = [];
     this.inputItem = '';
+    this.signIn=true;
+    this.signOut=false;
   }
 
   ngOnInit() {
@@ -29,14 +33,22 @@ export class AppComponent implements OnInit {
      })*/
   }
 
+  deleteItem(index: number) {
+    this.getEventsService.deleteEvent(this.todoList[index].id);
+    this.todoList.splice(index, 1);
+    document.body.querySelector('.todo__block').classList.remove('disabled');
+  }
+
   addItem(event: any) {
-    this.todoList.push(this.newItem);
-    this.newItem = '';
-    event.preventDefault();
+   this.getEventsService.insertEvent(this.newItem)
+    .subscribe((data)=>{
+      this.todoList.push(data);
+      console.log(this.todoList);
+    });
+    this.newItem='';
   }
 
   editItem(event: any) {
-    console.log('edit');
     event.path[2].classList.add('edit');
     event.path[2].querySelector('.todo__item-input').disabled = false;
     event.path[2].querySelector('.todo__item-input').focus();
@@ -46,33 +58,30 @@ export class AppComponent implements OnInit {
   }
 
   saveItem(event, i) {
-    this.todoList[i] = event.path[2].querySelector('.todo__item-input').value;
+    this.todoList[i].summary = event.path[2].querySelector('.todo__item-input').value;
     document.body.querySelector('.todo__block').classList.remove('disabled');
     event.path[2].querySelector('.todo__save').style.display = 'none';
     event.path[2].querySelector('.todo__edit').style.display = 'block';
     event.path[2].classList.remove('edit');
-  }
-
-  deleteItem(index: number) {
-    console.log('delete');
-    this.todoList.splice(index, 1);
-    document.body.querySelector('.todo__block').classList.remove('disabled');
+    this.getEventsService.updateEvent(this.todoList[i]);
   }
 
   authorize() {
     this.authorizeService.authorize()
       .then(() => {
-        console.log('done');
         return this.authorizeService.isSignedIn();
       })
       .then((data) => {
-        console.log('is sinedin', data);
         return this.getEventsService.getEvents();
       })
       .then((data) => {
-        console.log('events', data);
-        this.todoList = data;
-      });
+        for(let i=0; i<data.length; i++){
+          this.todoList.push(data[i]);
+        }
+        this.signIn=false;
+        this.signOut=true;
+      })
+      .catch(error=>console.log(error));
   }
 
   signout(){

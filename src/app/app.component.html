@@ -1,49 +1,65 @@
-<div class="todo">
+<div class='todo'>
 
-  <button id="authorize-button"
-          (click)='authorize()'>
-    Authorize
-  </button>
-  <button id="signout-button"
-          (click)='signout()'>
-    Sign Out
-  </button>
-
-  <div class="todo__add">
-    <input class="todo__add-input"
-           type="text"
-           [(ngModel)]="newItem"
-           name="newItem">
-    <button class="todo__add-button"
-            [disabled]="newItem===''"
-            (click)="addItem($event)">
-      <i class="material-icons">add_circle_outline</i>
+  <div class='todo__head'>
+    <h1 class='todo__title'>To do list</h1>
+    <button class='todo__button'
+            id='authorize-button'
+            *ngIf='signIn'
+            (click)='authorize()'>
+      Sign in
+    </button>
+    <button class='todo__button'
+            id='signout-button'
+            *ngIf='signOut'
+            (click)='signout()'>
+      Sign out
     </button>
   </div>
 
-  <ul class="todo__list">
-    <li class="todo__item"
-        *ngFor="let item of todoList; let i=index">
-      <input class="todo__item-input"
-             type="text"
-             [value]="item"
+  <div class='todo__add'>
+    <input class='todo__add-input'
+           type='text'
+           disabled='{{signIn}}'
+           [(ngModel)]='newItem'
+           name='newItem'>
+    <button class='todo__add-button'
+            [disabled]='newItem===""'
+            (click)='addItem()'>
+      <i class='material-icons'>add_circle_outline</i>
+    </button>
+  </div>
+
+  <div class='decorate' *ngIf='signIn'>
+    <div class='decorate__item'></div>
+    <div class='decorate__item'></div>
+    <div class='decorate__item'></div>
+    <div class='decorate__item'></div>
+    <div class='decorate__item'></div>
+  </div>
+
+  <ul class='todo__list'>
+    <li class='todo__item'
+        *ngFor='let item of todoList; let i=index'>
+      <input class='todo__item-input'
+             type='text'
+             [value]='item.summary'
              disabled
-             name="{{i}}"/>
-      <button class="todo__delete" (click)="deleteItem(i)">
-        <i class="material-icons">close</i>
+             name='{{i}}'/>
+      <button class='todo__delete' (click)='deleteItem(i)'>
+        <i class='material-icons'>close</i>
       </button>
-      <button class="todo__edit"
-              (click)="editItem($event)">
-        <i class="material-icons">border_color</i>
+      <button class='todo__edit'
+              (click)='editItem($event)'>
+        <i class='material-icons todo__edit'>border_color</i>
       </button>
-      <button class="todo__save"
-              (click)="saveItem($event, i)">
-        <i class="material-icons">save</i>
+      <button class='todo__save'
+              (click)='saveItem($event, i)'>
+        <i class='material-icons'>save</i>
       </button>
     </li>
   </ul>
 
-  <div class="todo__block"></div>
+  <div class='todo__block'></div>
 
 </div>
 

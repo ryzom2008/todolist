@@ -17,10 +17,41 @@ button{
     height: 100%;
     line-height: 100%;
 }
+i{
+    line-height: 40px;
+    color:#286600;
+}
 .todo{
     width: 500px;
     margin: 0 auto;
 }
+.todo__head{
+    position: relative;
+}
+.todo__title{
+    color: #286600;
+    font-family: sans-serif;
+    font-size: 35px;
+}
+.todo__button{
+    background: #286600;
+    border-radius: 5px;
+    color:#fff;
+    font-family: sans-serif;
+    padding: 0 15px;
+    height: 35px;
+    font-size: 14px;
+}
+.decorate__item{
+    border-bottom: 3px dotted #286600;
+    margin-top:50px;
+    margin-left: 1px;
+    margin-right: 4px;
+    -webkit-box-shadow: 0px 5px 28px 0px rgba(148,150,150,0.75);
+    -moz-box-shadow: 0px 5px 28px 0px rgba(148,150,150,0.75);
+    box-shadow: 0px 5px 28px 0px rgba(148,150,150,0.75); 
+}
+
 .todo__add{
     position: relative;
     -webkit-box-shadow: 0px 5px 28px 0px rgba(148,150,150,0.75);
@@ -53,6 +84,9 @@ button{
     box-shadow: 0px 5px 28px 0px rgba(148,150,150,0.75);
     z-index: 9999;
 }
+.todo__edit{
+    font-size: 20px;
+}
 .todo__item-input{
     cursor: pointer;
 }
@@ -78,8 +112,5 @@ button{
     left:0;
     right:0;
     z-index: 1;
-}
-#authorize-button{
-    left:0;
 }
   

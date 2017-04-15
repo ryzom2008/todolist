@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
-import {Http} from '@angular/http';
+import { Http } from '@angular/http';
+import {Response} from '@angular/http';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+
 declare const gapi: any;
 @Injectable()
 export class GetEventsService {
 
   constructor(private http: Http) { }
-
+  
   getEvents() {
-    // Make an API call to the People API, and print the user's given name.
     return gapi.client.calendar.events.list({
       'calendarId': 'primary',
       'timeMin': (new Date()).toISOString(),
@@ -20,9 +23,26 @@ export class GetEventsService {
     });
   }
 
-  updateEvent() {}
+  insertEvent(event): Observable<any> {
+      return gapi.client.calendar.events.quickAdd({
+      'calendarId': 'primary',
+      'text': event
+    }).then((response)=> {return response.result});
+  }
 
-  addEvent() {}
+  deleteEvent(id) {
+    gapi.client.calendar.events.delete({
+      'calendarId': 'primary',
+      'eventId': id
+    }).execute();
+  }
 
-  deleteEvent() {}
+  updateEvent(event) { 
+    gapi.client.calendar.events.patch({
+      'calendarId': 'primary',
+      'eventId': event.id,
+      'source': event
+    }).execute()
+   }
+
 }

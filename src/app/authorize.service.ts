@@ -13,7 +13,7 @@ export class AuthorizeService {
     return gapi.client.init({
       'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
       'clientId': '243412381843-lst1rr23um60bjjk0sp2j8v8mdvd37qk.apps.googleusercontent.com',
-      'scope': 'https://www.googleapis.com/auth/calendar.readonly',
+      'scope': 'https://www.googleapis.com/auth/calendar',
     });
   }
 

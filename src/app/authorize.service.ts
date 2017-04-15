@@ -58,4 +58,9 @@ export class AuthorizeService {
     gapi.auth2.getAuthInstance().signIn();
   }
 
+  signout(){
+    gapi.auth2.getAuthInstance().signOut();
+    console.log('hi');
+  }
+
 }

@@ -66,5 +66,9 @@ export class AppComponent implements OnInit{
     this.authorizeService.authorize();
   }
 
+  signout(){
+    this.authorizeService.signout();
+  }
+
 }
 

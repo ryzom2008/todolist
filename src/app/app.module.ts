@@ -19,7 +19,7 @@ import {AuthorizeService} from './authorize.service';
   ],
   providers: [
     GetEventsService,
-    AuthorizeService  
+    AuthorizeService
   ],
   bootstrap: [AppComponent]
 })

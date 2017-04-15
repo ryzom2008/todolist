@@ -1,3 +1,43 @@
-<h1>
-  {{title}}
-</h1>
+<div class="todo">
+
+  <button id="authorize-button"
+          (click)='authorize()'
+  >Authorize</button>
+
+  <div class="todo__add">
+    <input class="todo__add-input"
+          type="text" 
+          [(ngModel)]="newItem"
+          name="newItem">
+    <button class="todo__add-button"
+          [disabled]="newItem===''"
+          (click)="addItem($event)" 
+    ><i class="material-icons">add_circle_outline</i></button>
+  </div>
+
+  <ul class="todo__list">
+    <li class="todo__item" 
+        *ngFor="let item of todoList; let i=index">
+      <input class="todo__item-input"
+            type="text"  
+            [value]="item" 
+            disabled
+            name="{{i}}"/>
+      <button class="todo__delete" (click)="deleteItem(i)" >
+        <i class="material-icons">close</i>
+      </button>
+      <button class="todo__edit"
+              (click)="editItem($event)">
+        <i class="material-icons">border_color</i>
+      </button>
+      <button class="todo__save"
+              (click)="saveItem($event, i)">
+        <i class="material-icons">save</i>
+      </button>
+    </li>
+  </ul>
+
+  <div class="todo__block"></div>  
+
+</div>
+

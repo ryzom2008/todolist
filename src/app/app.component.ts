@@ -1,4 +1,4 @@
-import {Component, OnInit, DoCheck} from '@angular/core';
+import { Component, OnInit, DoCheck, Input, ChangeDetectorRef } from '@angular/core';
 import {GetEventsService} from './get-events.service';
 import {AuthorizeService} from './authorize.service';
 import {Response} from '@angular/http';
@@ -16,50 +16,52 @@ export class AppComponent implements OnInit {
   inputItem: string;
   signIn: boolean;
   signOut: boolean;
+  isCover: boolean;
 
   constructor(private getEventsService: GetEventsService,
-              private authorizeService: AuthorizeService) {
+              private authorizeService: AuthorizeService,
+              private changeDetectorRef: ChangeDetectorRef) {
     this.newItem = '';
     this.todoList = [];
     this.inputItem = '';
     this.signIn=true;
     this.signOut=false;
+    this.isCover=false;
   }
 
   ngOnInit() {
     this.authorizeService.init();
-    /*this.getEventsService.getData().subscribe((data: Response)=>{
-     console.log(data);
-     })*/
   }
 
   deleteItem(index: number) {
     this.getEventsService.deleteEvent(this.todoList[index].id);
     this.todoList.splice(index, 1);
-    document.body.querySelector('.todo__block').classList.remove('disabled');
+    this.isCover=false;
+    this.changeDetectorRef.detectChanges();
   }
 
   addItem(event: any) {
    this.getEventsService.insertEvent(this.newItem)
-    .subscribe((data)=>{
-      this.todoList.push(data);
-      console.log(this.todoList);
+    .then((data)=>{
+      this.todoList.unshift(data);
+       this.changeDetectorRef.detectChanges();
     });
     this.newItem='';
   }
 
   editItem(event: any) {
+    console.log(event);
     event.path[2].classList.add('edit');
     event.path[2].querySelector('.todo__item-input').disabled = false;
     event.path[2].querySelector('.todo__item-input').focus();
     event.path[0].closest('button').style.display = 'none';
     event.path[2].querySelector('.todo__save').style.display = 'block';
-    document.body.querySelector('.todo__block').classList.add('disabled');
+    this.isCover=true;
   }
 
   saveItem(event, i) {
     this.todoList[i].summary = event.path[2].querySelector('.todo__item-input').value;
-    document.body.querySelector('.todo__block').classList.remove('disabled');
+    this.isCover=false;
     event.path[2].querySelector('.todo__save').style.display = 'none';
     event.path[2].querySelector('.todo__edit').style.display = 'block';
     event.path[2].classList.remove('edit');

@@ -1,19 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import {Response} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import { Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 
 declare const gapi: any;
 @Injectable()
 export class GetEventsService {
-
-  constructor(private http: Http) { }
+  date: any;
+  constructor(private http: Http) {  }
   
   getEvents() {
+    this.date=new Date();
+    this.date.setFullYear(this.date.getFullYear()+1);
+    this.date=this.date.toISOString();
     return gapi.client.calendar.events.list({
       'calendarId': 'primary',
-      'timeMin': (new Date()).toISOString(),
+      'timeMax': this.date,
       'showDeleted': false,
       'singleEvents': true,
       'maxResults': 10,
@@ -23,7 +25,7 @@ export class GetEventsService {
     });
   }
 
-  insertEvent(event): Observable<any> {
+  insertEvent(event){
       return gapi.client.calendar.events.quickAdd({
       'calendarId': 'primary',
       'text': event

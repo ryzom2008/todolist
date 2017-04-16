@@ -39,10 +39,11 @@
 
   <ul class='todo__list'>
     <li class='todo__item'
+        [ngClass]='{"edit": isEdit}'
         *ngFor='let item of todoList; let i=index'>
       <input class='todo__item-input'
              type='text'
-             [value]='item.summary'
+             [value]='item.updated+" "+item.summary'
              disabled
              name='{{i}}'/>
       <button class='todo__delete' (click)='deleteItem(i)'>
@@ -59,7 +60,7 @@
     </li>
   </ul>
 
-  <div class='todo__block'></div>
+  <div class='todo__block' [ngClass]='{"cover": isCover}'></div>
 
 </div>
 

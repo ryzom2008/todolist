@@ -10,7 +10,7 @@
     </button>
     <button class='todo__button'
             id='signout-button'
-            *ngIf='signOut'
+            *ngIf='!signIn'
             (click)='signout()'>
       Sign out
     </button>
@@ -20,8 +20,7 @@
     <input class='todo__add-input'
            type='text'
            disabled='{{signIn}}'
-           [(ngModel)]='newItem'
-           name='newItem'>
+           [(ngModel)]='newItem'>
     <button class='todo__add-button'
             [disabled]='newItem===""'
             (click)='addItem()'>
@@ -37,28 +36,14 @@
     <div class='decorate__item'></div>
   </div>
 
-  <ul class='todo__list'>
-    <li class='todo__item'
-        [ngClass]='{"edit": isEdit}'
-        *ngFor='let item of todoList; let i=index'>
-      <input class='todo__item-input'
-             type='text'
-             [value]='item.updated+" "+item.summary'
-             disabled
-             name='{{i}}'/>
-      <button class='todo__delete' (click)='deleteItem(i)'>
-        <i class='material-icons'>close</i>
-      </button>
-      <button class='todo__edit'
-              (click)='editItem($event)'>
-        <i class='material-icons todo__edit'>border_color</i>
-      </button>
-      <button class='todo__save'
-              (click)='saveItem($event, i)'>
-        <i class='material-icons'>save</i>
-      </button>
-    </li>
-  </ul>
+  <div class='todo__list'>
+    <app-todo-item [todoItem]="todoList[i]"
+                   (onEdit)="editItem()"
+                   (onUpdate)="updateItem($event)"
+                   (onDelete)="deleteItem($event, i)"
+                   *ngFor='let item of todoList | slice:0:9; let i=index'>
+    </app-todo-item>
+  </div>
 
   <div class='todo__block' [ngClass]='{"cover": isCover}'></div>
 

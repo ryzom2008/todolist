@@ -5,12 +5,14 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 
-import {GetEventsService} from './get-events.service';
-import {AuthorizeService} from './authorize.service';
+import { GetEventsService } from './get-events.service';
+import { AuthorizeService } from './authorize.service';
+import { ToDoItemComponent } from './todo-item/todo-item.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ToDoItemComponent
   ],
   imports: [
     BrowserModule,

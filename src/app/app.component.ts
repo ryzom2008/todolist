@@ -1,7 +1,7 @@
-import { Component, OnInit, DoCheck, Input, ChangeDetectorRef } from '@angular/core';
-import {GetEventsService} from './get-events.service';
-import {AuthorizeService} from './authorize.service';
-import {Response} from '@angular/http';
+import { ChangeDetectorRef, Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { AuthorizeService } from './authorize.service';
+import { GetEventsService } from './get-events.service';
+import { TodoItem } from './to-do-item';
 
 @Component({
   selector: 'app-root',
@@ -12,60 +12,50 @@ import {Response} from '@angular/http';
 
 export class AppComponent implements OnInit {
   newItem: any;
-  todoList: any;
+  todoList: Array<TodoItem>;
   inputItem: string;
   signIn: boolean;
-  signOut: boolean;
   isCover: boolean;
-
-  constructor(private getEventsService: GetEventsService,
-              private authorizeService: AuthorizeService,
-              private changeDetectorRef: ChangeDetectorRef) {
+  
+  constructor(
+    private getEventsService: GetEventsService,
+    private authorizeService: AuthorizeService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
     this.newItem = '';
     this.todoList = [];
     this.inputItem = '';
-    this.signIn=true;
-    this.signOut=false;
-    this.isCover=false;
+    this.signIn = true;
+    this.isCover = false;
   }
 
   ngOnInit() {
     this.authorizeService.init();
   }
+  
+  addItem() {
+    this.getEventsService.insertEvent(this.newItem)
+      .then((data) => {
+        this.todoList.unshift(data);
+        this.changeDetectorRef.detectChanges();
+      });
+    this.newItem = '';
+  }
 
-  deleteItem(index: number) {
-    this.getEventsService.deleteEvent(this.todoList[index].id);
+  deleteItem(todoItem: any, index: number) {
+    this.getEventsService.deleteEvent(todoItem.id);
     this.todoList.splice(index, 1);
-    this.isCover=false;
     this.changeDetectorRef.detectChanges();
+    this.isCover = false;
   }
 
-  addItem(event: any) {
-   this.getEventsService.insertEvent(this.newItem)
-    .then((data)=>{
-      this.todoList.unshift(data);
-       this.changeDetectorRef.detectChanges();
-    });
-    this.newItem='';
+  editItem() {
+    this.isCover = true;
   }
 
-  editItem(event: any) {
-    console.log(event);
-    event.path[2].classList.add('edit');
-    event.path[2].querySelector('.todo__item-input').disabled = false;
-    event.path[2].querySelector('.todo__item-input').focus();
-    event.path[0].closest('button').style.display = 'none';
-    event.path[2].querySelector('.todo__save').style.display = 'block';
-    this.isCover=true;
-  }
-
-  saveItem(event, i) {
-    this.todoList[i].summary = event.path[2].querySelector('.todo__item-input').value;
-    this.isCover=false;
-    event.path[2].querySelector('.todo__save').style.display = 'none';
-    event.path[2].querySelector('.todo__edit').style.display = 'block';
-    event.path[2].classList.remove('edit');
-    this.getEventsService.updateEvent(this.todoList[i]);
+  updateItem(todoItem: any) {
+    this.isCover = false;
+    this.getEventsService.updateEvent(todoItem);
   }
 
   authorize() {
@@ -73,21 +63,21 @@ export class AppComponent implements OnInit {
       .then(() => {
         return this.authorizeService.isSignedIn();
       })
-      .then((data) => {
+      .then(() => {
         return this.getEventsService.getEvents();
       })
       .then((data) => {
-        for(let i=0; i<data.length; i++){
-          this.todoList.push(data[i]);
-        }
-        this.signIn=false;
-        this.signOut=true;
+        data.sort((item1, item2) => (new Date(item2.created)).valueOf() - (new Date(item1.created)).valueOf());
+        this.todoList = data;
+        this.signIn = false;
       })
-      .catch(error=>console.log(error));
+      .catch(error => console.log(error));
   }
 
-  signout(){
+  signout() {
+    this.todoList = [];
     this.authorizeService.signout();
+    this.signIn=true;
   }
 }
 

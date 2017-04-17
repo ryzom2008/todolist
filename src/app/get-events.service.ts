@@ -4,21 +4,17 @@ import { Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 declare const gapi: any;
+
 @Injectable()
 export class GetEventsService {
   date: any;
   constructor(private http: Http) {  }
-  
+
   getEvents() {
-    this.date=new Date();
-    this.date.setFullYear(this.date.getFullYear()+1);
-    this.date=this.date.toISOString();
     return gapi.client.calendar.events.list({
       'calendarId': 'primary',
-      'timeMax': this.date,
       'showDeleted': false,
       'singleEvents': true,
-      'maxResults': 10,
       'orderBy': 'startTime'
     }).then(function (response) {
       return response.result.items;
@@ -29,7 +25,9 @@ export class GetEventsService {
       return gapi.client.calendar.events.quickAdd({
       'calendarId': 'primary',
       'text': event
-    }).then((response)=> {return response.result});
+    }).then((response) => {
+        return response.result;
+      });
   }
 
   deleteEvent(id) {
@@ -39,12 +37,12 @@ export class GetEventsService {
     }).execute();
   }
 
-  updateEvent(event) { 
+  updateEvent(event) {
     gapi.client.calendar.events.patch({
       'calendarId': 'primary',
       'eventId': event.id,
-      'source': event
-    }).execute()
+      'resource': event
+    }).execute(evt => console.log(evt));
    }
 
 }

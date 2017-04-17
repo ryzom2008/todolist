@@ -6,7 +6,8 @@ export class AuthorizeService {
   }
 
   init() {
-    gapi.load('client: auth2', this.start);
+      gapi.load('client: auth2', this.start);
+    
   }
 
   start() {

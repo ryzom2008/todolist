@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authorizeService.init();
+    this.authorizeService.init()
   }
   
   addItem() {
@@ -51,11 +51,13 @@ export class AppComponent implements OnInit {
 
   editItem() {
     this.isCover = true;
+    this.changeDetectorRef.detectChanges();
   }
 
   updateItem(todoItem: any) {
     this.isCover = false;
     this.getEventsService.updateEvent(todoItem);
+    this.changeDetectorRef.detectChanges();
   }
 
   authorize() {

@@ -87,3 +87,9 @@ i{
     right:0;
     z-index: 1;
 }
+
+@media screen and (max-device-width : 540px){
+    .todo{
+        width: 90%;
+    }
+}

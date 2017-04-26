@@ -19,7 +19,7 @@
   <div class='todo__add'>
     <input class='todo__add-input'
            type='text'
-           disabled='{{signIn}}'
+           [disabled]='signIn'
            [(ngModel)]='newItem'>
     <button class='todo__add-button'
             [disabled]='newItem===""'

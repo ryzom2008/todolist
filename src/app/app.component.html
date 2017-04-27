@@ -37,11 +37,11 @@
   </div>
 
   <div class='todo__list'>
-    <app-todo-item [todoItem]="todoList[i]"
+    <app-todo-item *ngFor='let item of todoList | slice:0:9; let i=index'
+                    [todoItem]="todoList[i]"
                    (onEdit)="editItem()"
                    (onUpdate)="updateItem($event)"
-                   (onDelete)="deleteItem($event, i)"
-                   *ngFor='let item of todoList | slice:0:9; let i=index'>
+                   (onDelete)="deleteItem($event, i)">
     </app-todo-item>
   </div>
 

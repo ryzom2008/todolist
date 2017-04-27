@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   inputItem: string;
   signIn: boolean;
   isCover: boolean;
-  
+
   constructor(
     private getEventsService: GetEventsService,
     private authorizeService: AuthorizeService,
@@ -31,8 +31,13 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.authorizeService.init()
+    .then(()=>{
+      var self=this;
+      setTimeout(function(){
+      self.authorize();
+    }, 1000)})
   }
-  
+
   addItem() {
     this.getEventsService.insertEvent(this.newItem)
       .then((data) => {

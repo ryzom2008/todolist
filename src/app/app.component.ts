@@ -31,11 +31,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.authorizeService.init()
-    .then(()=>{
-      var self=this;
-      setTimeout(function(){
-      self.authorize();
-    }, 1000)})
   }
 
   addItem() {
